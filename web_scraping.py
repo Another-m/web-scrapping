@@ -15,25 +15,24 @@ def chek_in_keywords(head):
 
 def parsing(soup):
     articles = soup.find_all(class_="tm-article-snippet__title")
-    articles_data = soup.find_all(class_="tm-article-snippet__datetime-published")
+    articles_date = soup.find_all(class_="tm-article-snippet__datetime-published")
 
     fist_news = []
     last_news = []
     for en, article in enumerate(articles):
-        
+
         head_artic = article.find_all("span")
         link_artic = article.find_all('a')
 
         pattern_head = re.compile(r'<span>(.*)<')
         pattern_link = re.compile(r'href="(.*)">')
-        pattern_data = re.compile(r'title="(.*)">')
+        pattern_date = re.compile(r'title="(.*)">')
 
         head = re.findall(pattern_head, str(head_artic))[0]
         link = "https://habr.com" + str(re.findall(pattern_link, str(link_artic))[0])
-        data = re.findall(pattern_data, str(articles_data[en]))[0]
+        date = re.findall(pattern_date, str(articles_date[en]))[0]
 
-        all_info = {"Дата": data, "Заголовок": head, "Ссылка": link}
-        
+        all_info = {"Дата": date, "Заголовок": head, "Ссылка": link}
         if chek_in_keywords(head) > 0:
             fist_news.append(all_info)
         else:
@@ -52,18 +51,17 @@ def main(URL):
     print()
     pprint(all_news)
     print()
-    
+
     try:
         send_to_tg(all_news)
         print("\n Интересные статьи успешно опубликованы на телеграм канале")
     except:
-        print("\n Не удалось опубликовать статьи в телеграм канале, неверный token, либо Chat ID")
+        print("\n Не удалось опубликовать статьи на телеграм канале, неверный token, либо Chat ID")
 
 
 
 if __name__ == "__main__":
     main(URL)
-
 
 
 
