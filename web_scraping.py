@@ -20,7 +20,7 @@ def parsing(soup):
     fist_news = []
     last_news = []
     for en, article in enumerate(articles):
-
+        
         head_artic = article.find_all("span")
         link_artic = article.find_all('a')
 
@@ -33,6 +33,7 @@ def parsing(soup):
         data = re.findall(pattern_data, str(articles_data[en]))[0]
 
         all_info = {"Дата": data, "Заголовок": head, "Ссылка": link}
+        
         if chek_in_keywords(head) > 0:
             fist_news.append(all_info)
         else:
@@ -51,11 +52,12 @@ def main(URL):
     print()
     pprint(all_news)
     print()
+    
     try:
         send_to_tg(all_news)
         print("\n Интересные статьи успешно опубликованы на телеграм канале")
     except:
-        print("Не удалось опубликовать статьи в телеграм канале, неверный token, либо Chat ID")
+        print("\n Не удалось опубликовать статьи в телеграм канале, неверный token, либо Chat ID")
 
 
 
